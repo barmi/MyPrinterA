@@ -38,14 +38,16 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 	private BroadcastReceiver broadcastReceiver = null;
 	private IntentFilter intentFilter = null;
 
-	private int PICK_IMAGE_REQUEST = 1;
+	final int PICK_IMAGE_REQUEST = 1;
+	final int BUTTON_COUNT = 8;
 
-	Button btnSearch, btnDisconnect, btnPrint, btnPrint2;
+	Button btnSearch, btnDisconnect;
 	SearchBTActivity mActivity;
 
 	ExecutorService es = Executors.newScheduledThreadPool(30);
 	Canvas mCanvas = new Canvas();
 	BTPrinting mBt = new BTPrinting();
+	Button[] btnPrint = new Button[BUTTON_COUNT];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +61,15 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 
 		btnSearch = findViewById(R.id.buttonSearch);
 		btnDisconnect = findViewById(R.id.buttonDisconnect);
-		btnPrint = findViewById(R.id.buttonPrint);
-		btnPrint2 = findViewById(R.id.buttonPrint2);
+		for (int i = 0; i < BUTTON_COUNT; i++) {
+			btnPrint[i] = findViewById(getResources().getIdentifier(String.format("buttonPrint%d", i+1), "id", getPackageName()));
+			btnPrint[i].setOnClickListener(this);
+			btnPrint[i].setEnabled(false);
+		}
 		btnSearch.setOnClickListener(this);
 		btnDisconnect.setOnClickListener(this);
-		btnPrint.setOnClickListener(this);
-		btnPrint2.setOnClickListener(this);
 		btnSearch.setEnabled(true);
 		btnDisconnect.setEnabled(false);
-		btnPrint.setEnabled(false);
-		btnPrint2.setEnabled(false);
 
 		mCanvas.Set(mBt);
 		mBt.SetCallBack(this);
@@ -133,8 +134,8 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 				es.submit(new TaskClose(mBt));
 				break;
 
-			case R.id.buttonPrint:
-				btnPrint.setEnabled(false);
+			case R.id.buttonPrint1:
+				btnPrint[0].setEnabled(false);
 				es.submit(new TaskPrint(mCanvas));
 				break;
 
@@ -154,6 +155,11 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 		}
 	}
 
+	private void setButtonsEnable(boolean enable) {
+		for (int i = 0; i < BUTTON_COUNT; i++) {
+			btnPrint[i].setEnabled(enable);
+		}
+	}
 	private void initBroadcast() {
 		broadcastReceiver = new BroadcastReceiver() {
 
@@ -200,8 +206,7 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 								btn.setEnabled(false);
 							}
 							btnDisconnect.setEnabled(false);
-							btnPrint.setEnabled(false);
-							btnPrint2.setEnabled(false);
+							setButtonsEnable(false);
 							es.submit(new TaskOpen(mBt, address, mActivity));
 						}
 					});
@@ -272,7 +277,8 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 									R.string.printsuccess) : getResources()
 									.getString(R.string.printfailed),
 							Toast.LENGTH_SHORT).show();
-					mActivity.btnPrint.setEnabled(bIsOpened);
+					//mActivity.btnPrint.setEnabled(bIsOpened);
+					mActivity.setButtonsEnable(bIsOpened);
 				}
 			});
 
@@ -303,7 +309,8 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 									R.string.printsuccess) : getResources()
 									.getString(R.string.printfailed),
 							Toast.LENGTH_SHORT).show();
-					mActivity.btnPrint2.setEnabled(bIsOpened);
+					//mActivity.btnPrint2.setEnabled(bIsOpened);
+					mActivity.setButtonsEnable(bIsOpened);
 				}
 			});
 
@@ -333,8 +340,9 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 			@Override
 			public void run() {
 				btnDisconnect.setEnabled(true);
-				btnPrint.setEnabled(true);
-				btnPrint2.setEnabled(true);
+				setButtonsEnable(true);
+				//btnPrint.setEnabled(true);
+				//btnPrint2.setEnabled(true);
 				btnSearch.setEnabled(false);
 				linearlayoutdevices.setEnabled(false);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {
@@ -355,8 +363,9 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 			@Override
 			public void run() {
 				btnDisconnect.setEnabled(false);
-				btnPrint.setEnabled(false);
-				btnPrint2.setEnabled(false);
+				setButtonsEnable(false);
+				//btnPrint.setEnabled(false);
+				//btnPrint2.setEnabled(false);
 				btnSearch.setEnabled(true);
 				linearlayoutdevices.setEnabled(true);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {
@@ -376,8 +385,9 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 			@Override
 			public void run() {
 				btnDisconnect.setEnabled(false);
-				btnPrint.setEnabled(false);
-				btnPrint2.setEnabled(false);
+				setButtonsEnable(false);
+				//btnPrint.setEnabled(false);
+				//btnPrint2.setEnabled(false);
 				btnSearch.setEnabled(true);
 				linearlayoutdevices.setEnabled(true);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {

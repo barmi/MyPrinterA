@@ -54,13 +54,13 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 
 		mActivity = this;
 
-		progressBarSearchStatus = (ProgressBar) findViewById(R.id.progressBarSearchStatus);
-		linearlayoutdevices = (LinearLayout) findViewById(R.id.linearlayoutdevices);
+		progressBarSearchStatus = findViewById(R.id.progressBarSearchStatus);
+		linearlayoutdevices = findViewById(R.id.linearlayoutdevices);
 
-		btnSearch = (Button) findViewById(R.id.buttonSearch);
-		btnDisconnect = (Button) findViewById(R.id.buttonDisconnect);
-		btnPrint = (Button) findViewById(R.id.buttonPrint);
-		btnPrint2 = (Button)findViewById(R.id.buttonPrint2);
+		btnSearch = findViewById(R.id.buttonSearch);
+		btnDisconnect = findViewById(R.id.buttonDisconnect);
+		btnPrint = findViewById(R.id.buttonPrint);
+		btnPrint2 = findViewById(R.id.buttonPrint2);
 		btnSearch.setOnClickListener(this);
 		btnDisconnect.setOnClickListener(this);
 		btnPrint.setOnClickListener(this);

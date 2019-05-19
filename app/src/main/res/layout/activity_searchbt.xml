@@ -42,23 +42,69 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/buttonPrint"
+        android:layout_above="@+id/buttons"
         android:layout_marginTop="10dp"
         android:text="Disconnect" />
-	<Button
-        android:id="@+id/buttonPrint"
+    <TableLayout
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_above="@+id/buttonPrint2"
-        android:layout_marginTop="10dp"
-        android:text="Print" />
-    <Button
-        android:id="@+id/buttonPrint2"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:text="Print Test" />
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0,1">
+        <TableRow>
+
+            <Button
+                android:id="@+id/buttonPrint"
+                android:layout_width="13dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="티켓" />
+
+            <Button
+                android:id="@+id/buttonPrint2"
+                android:layout_width="117dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="사진" />
+            <Button
+                android:id="@+id/buttonPrint3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+            <Button
+                android:id="@+id/buttonPrint4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/buttonPrint5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+            <Button
+                android:id="@+id/buttonPrint6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+            <Button
+                android:id="@+id/buttonPrint7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+            <Button
+                android:id="@+id/buttonPrint8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="출력" />
+        </TableRow>
+    </TableLayout>
 </RelativeLayout>

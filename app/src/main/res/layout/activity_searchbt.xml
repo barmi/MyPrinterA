@@ -16,7 +16,7 @@
     <Button
         android:id="@+id/buttonSearch"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/progressBarSearchStatus"
         android:layout_marginTop="10dp"
@@ -40,7 +40,7 @@
 	<Button
         android:id="@+id/buttonDisconnect"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_above="@+id/buttonPrint"
         android:layout_marginTop="10dp"
@@ -48,9 +48,17 @@
 	<Button
         android:id="@+id/buttonPrint"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/buttonPrint2"
+        android:layout_marginTop="10dp"
+        android:text="Print" />
+    <Button
+        android:id="@+id/buttonPrint2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp"
-        android:text="Print" />
+        android:text="Print Test" />
 </RelativeLayout>

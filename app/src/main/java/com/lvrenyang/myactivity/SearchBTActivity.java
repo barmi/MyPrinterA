@@ -1,14 +1,5 @@
 package com.lvrenyang.myactivity;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import com.lvrenyang.io.BTPrinting;
-import com.lvrenyang.io.Canvas;
-import com.lvrenyang.io.IOCallBack;
-import com.lvrenyang.sample3.R;
-
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -16,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class SearchBTActivity extends Activity implements OnClickListener,
+import com.lvrenyang.io.BTPrinting;
+import com.lvrenyang.io.Canvas;
+import com.lvrenyang.io.IOCallBack;
+import com.lvrenyang.sample3.R;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class SearchBTActivity extends AppCompatActivity implements OnClickListener,
 		IOCallBack {
 
 	private LinearLayout linearlayoutdevices;
@@ -33,7 +33,7 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 	private BroadcastReceiver broadcastReceiver = null;
 	private IntentFilter intentFilter = null;
 
-	Button btnSearch, btnDisconnect, btnPrint;
+	Button btnSearch, btnDisconnect, btnPrint, btnPrint2;
 	SearchBTActivity mActivity;
 
 	ExecutorService es = Executors.newScheduledThreadPool(30);
@@ -53,12 +53,15 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 		btnSearch = (Button) findViewById(R.id.buttonSearch);
 		btnDisconnect = (Button) findViewById(R.id.buttonDisconnect);
 		btnPrint = (Button) findViewById(R.id.buttonPrint);
+		btnPrint2 = (Button)findViewById(R.id.buttonPrint2);
 		btnSearch.setOnClickListener(this);
 		btnDisconnect.setOnClickListener(this);
 		btnPrint.setOnClickListener(this);
+		btnPrint2.setOnClickListener(this);
 		btnSearch.setEnabled(true);
 		btnDisconnect.setEnabled(false);
 		btnPrint.setEnabled(false);
+		btnPrint2.setEnabled(false);
 
 		mCanvas.Set(mBt);
 		mBt.SetCallBack(this);
@@ -76,37 +79,50 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
-		case R.id.buttonSearch: {
-			BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-			if (null == adapter) {
-				finish();
-				break;
-			}
-
-			if (!adapter.isEnabled()) {
-				if (adapter.enable()) {
-					while (!adapter.isEnabled())
-						;
-				} else {
+			case R.id.buttonSearch: {
+				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+				if (null == adapter) {
 					finish();
 					break;
 				}
+
+				if (!adapter.isEnabled()) {
+					if (adapter.enable()) {
+						while (!adapter.isEnabled())
+							;
+					} else {
+						finish();
+						break;
+					}
+				}
+
+				adapter.cancelDiscovery();
+				linearlayoutdevices.removeAllViews();
+				adapter.startDiscovery();
+				break;
 			}
 
-			adapter.cancelDiscovery();
-			linearlayoutdevices.removeAllViews();
-			adapter.startDiscovery();
-			break;
-		}
+			case R.id.buttonDisconnect:
+				es.submit(new TaskClose(mBt));
+				break;
 
-		case R.id.buttonDisconnect:
-			es.submit(new TaskClose(mBt));
-			break;
+			case R.id.buttonPrint:
+				btnPrint.setEnabled(false);
+				es.submit(new TaskPrint(mCanvas));
+				break;
 
-		case R.id.buttonPrint:
-			btnPrint.setEnabled(false);
-			es.submit(new TaskPrint(mCanvas));
-			break;
+			case R.id.buttonPrint2:
+				btnPrint2.setEnabled(false);
+				es.submit(new TaskPrint2(mCanvas));
+				/*
+				Intent intent = new Intent();
+				// Show only images, no videos or anything else
+				intent.setType("image/*");
+				intent.setAction(Intent.ACTION_GET_CONTENT);
+				// Always show the chooser (if there are multiple options available)
+				startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+				*/
+				break;
 		}
 	}
 
@@ -157,6 +173,7 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 							}
 							btnDisconnect.setEnabled(false);
 							btnPrint.setEnabled(false);
+							btnPrint2.setEnabled(false);
 							es.submit(new TaskOpen(mBt, address, mActivity));
 						}
 					});
@@ -234,6 +251,37 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	public class TaskPrint2 implements Runnable {
+		Canvas canvas = null;
+
+		public TaskPrint2(Canvas canvas) {
+			this.canvas = canvas;
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+
+			final boolean bPrintResult = Prints.PrintTicket2(getApplicationContext(), canvas, AppStart.nPrintWidth, AppStart.nPrintHeight);
+			final boolean bIsOpened = canvas.GetIO().IsOpened();
+
+			mActivity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Toast.makeText(
+							mActivity.getApplicationContext(),
+							bPrintResult ? getResources().getString(
+									R.string.printsuccess) : getResources()
+									.getString(R.string.printfailed),
+							Toast.LENGTH_SHORT).show();
+					mActivity.btnPrint2.setEnabled(bIsOpened);
+				}
+			});
+
+		}
+	}
+
 	public class TaskClose implements Runnable {
 		BTPrinting bt = null;
 
@@ -258,6 +306,7 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 			public void run() {
 				btnDisconnect.setEnabled(true);
 				btnPrint.setEnabled(true);
+				btnPrint2.setEnabled(true);
 				btnSearch.setEnabled(false);
 				linearlayoutdevices.setEnabled(false);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {
@@ -279,6 +328,7 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 			public void run() {
 				btnDisconnect.setEnabled(false);
 				btnPrint.setEnabled(false);
+				btnPrint2.setEnabled(false);
 				btnSearch.setEnabled(true);
 				linearlayoutdevices.setEnabled(true);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {
@@ -299,6 +349,7 @@ public class SearchBTActivity extends Activity implements OnClickListener,
 			public void run() {
 				btnDisconnect.setEnabled(false);
 				btnPrint.setEnabled(false);
+				btnPrint2.setEnabled(false);
 				btnSearch.setEnabled(true);
 				linearlayoutdevices.setEnabled(true);
 				for (int i = 0; i < linearlayoutdevices.getChildCount(); ++i) {

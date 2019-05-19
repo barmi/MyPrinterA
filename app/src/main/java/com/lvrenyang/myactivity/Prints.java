@@ -1,9 +1,5 @@
 package com.lvrenyang.myactivity;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -12,6 +8,10 @@ import android.graphics.Matrix;
 import android.graphics.Typeface;
 
 import com.lvrenyang.io.Canvas;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Prints {
 
@@ -59,7 +59,52 @@ public class Prints {
 		bPrintResult = canvas.GetIO().IsOpened();
 		return bPrintResult;
 	}
-	
+
+	public static boolean PrintTicket2(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
+		boolean bPrintResult = false;
+
+		Bitmap logo = getImageFromAssetsFile(ctx, "Kitty.bmp");
+
+		Typeface tfTitle = Typeface.createFromAsset(ctx.getAssets(), "fonts" + File.separator + "NanumBarunGothic.ttf");
+		Typeface tfContent = Typeface.createFromAsset(ctx.getAssets(), "fonts" + File.separator + "NanumGothic.ttf");
+		Typeface tfNumber = Typeface.createFromAsset(ctx.getAssets(), "fonts" + File.separator + "xichang.otf");
+
+		canvas.CanvasBegin(nPrintWidth, nPrintHeight);
+		canvas.SetPrintDirection(0);
+
+		canvas.DrawBox(0,0,nPrintWidth-1,nPrintHeight-1);
+
+		canvas.DrawBitmap(logo, 1, 10, 0);
+
+		canvas.DrawText("소프트웨어에 물들다", 10 + logo.getWidth(), 10, 0, tfTitle, 40, 0);
+		canvas.DrawText("출력일  1234567", 0, 60, 0, tfContent, 20, 0);
+		canvas.DrawText("행사일  4567890", nPrintWidth/2, 60, 0, tfContent, 20, 0);
+		canvas.DrawText("출력일  1234567", 0, 80, 0, tfContent, 20, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("행사일  4567890", nPrintWidth/2, 80, 0, tfContent, 20, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("注数		5", 0, 100, 0, tfContent, 20, 0);
+		canvas.DrawText("金额	10.00", nPrintWidth/2, 100, 0, tfContent, 20, 0);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 120, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 160, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 200, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 240, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 280, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+		canvas.DrawText("A: 02 07 10 17 20 21 25", 0, 320, 0, tfNumber, 40, Canvas.FONTSTYLE_BOLD);
+
+		canvas.DrawBarcode("179736629632968", 0, 380, 0, 2, 80, Canvas.BARCODE_TYPE_CODE128);
+		canvas.DrawQRCode("179736629632968", Canvas.HORIZONTALALIGNMENT_RIGHT, 380, 0, 3, 5, 1);
+
+		canvas.DrawText("玩法 七乐彩 单式*1 开奖时间2016-09-30", 0, 500, 0, tfContent, 20, 0);
+		canvas.DrawText("销售时间  20160923 15:10:47", 0, 520, 0, tfContent, 20, 0);
+		canvas.DrawText("地址  福建厦门", 0, 540, 0, tfContent, 20, 0);
+		canvas.DrawText("自助站点通兑	客服热线：0771-5787586", 0, 560, 0, tfContent, 20, 0);
+
+		canvas.CanvasEnd();
+		canvas.CanvasPrint(1, 1);
+
+		bPrintResult = canvas.GetIO().IsOpened();
+		return bPrintResult;
+	}
+
 	public static boolean PrintTest(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
 		boolean bPrintResult = false;
 		

@@ -4,9 +4,7 @@
     android:versionCode="5"
     android:versionName="5.0" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+    <uses-sdk android:targetSdkVersion="19" />
 
     <uses-feature
         android:name="android.hardware.wifi"

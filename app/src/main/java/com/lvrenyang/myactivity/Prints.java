@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 
 import com.lvrenyang.io.Canvas;
@@ -12,6 +11,7 @@ import com.lvrenyang.io.Canvas;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 public class Prints {
 
@@ -104,6 +104,33 @@ public class Prints {
 		bPrintResult = canvas.GetIO().IsOpened();
 		return bPrintResult;
 	}
+
+    public static boolean PrintBitmap(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight, Bitmap bitmap) {
+        boolean bPrintResult = false;
+
+
+        int bw = bitmap.getWidth();
+        int bh = bitmap.getHeight();
+        Bitmap pic;
+        if (bw > nPrintWidth) {
+        	pic = resizeImage(bitmap, nPrintWidth, (bh > nPrintHeight) ? bh : nPrintHeight);
+		}
+        else {
+        	pic = bitmap;
+		}
+        // dithering
+		Bitmap bwBitmap = com.askjeffreyliu.floydsteinbergdithering.Utils.floydSteinbergDithering(pic);
+
+        canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
+        canvas.SetPrintDirection(0);
+        canvas.DrawBitmap(bwBitmap, 0, 0, 0);
+
+        canvas.CanvasEnd();
+        canvas.CanvasPrint(1, 1);
+
+        bPrintResult = canvas.GetIO().IsOpened();
+        return bPrintResult;
+    }
 
 	public static boolean PrintTest(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
 		boolean bPrintResult = false;
@@ -208,32 +235,20 @@ public class Prints {
 		return image;
 	}
 	
-	public static Bitmap resizeImage(Bitmap bitmap, int w, int h) {
-		// load the origial Bitmap
-		Bitmap BitmapOrg = bitmap;
+	public static Bitmap resizeImage(Bitmap image, int maxWidth, int maxHeight) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		float ratioBitmap = (float) width / (float) height;
+		float ratioMax = (float) maxWidth / (float) maxHeight;
 
-		int width = BitmapOrg.getWidth();
-		int height = BitmapOrg.getHeight();
-		int newWidth = w;
-		int newHeight = h;
-
-		// calculate the scale
-		float scaleWidth = ((float) newWidth) / width;
-		float scaleHeight = ((float) newHeight) / height;
-
-		// create a matrix for the manipulation
-		Matrix matrix = new Matrix();
-		// resize the Bitmap
-		matrix.postScale(scaleWidth, scaleHeight);
-		// if you want to rotate the Bitmap
-		// matrix.postRotate(45);
-
-		// recreate the new Bitmap
-		Bitmap resizedBitmap = Bitmap.createBitmap(BitmapOrg, 0, 0, width,
-				height, matrix, true);
-
-		// make a Drawable from Bitmap to allow to set the Bitmap
-		// to the ImageView, ImageButton or what ever
-		return resizedBitmap;
+		int finalWidth = maxWidth;
+		int finalHeight = maxHeight;
+		if (ratioMax > ratioBitmap) {
+			finalWidth = (int) ((float)maxHeight * ratioBitmap);
+		} else {
+			finalHeight = (int) ((float)maxWidth / ratioBitmap);
+		}
+		image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+		return image;
 	}
 }

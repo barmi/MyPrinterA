@@ -25,4 +25,6 @@ dependencies {
 
     //ted permission
     implementation "gun0912.ted:tedpermission:2.1.0"
+
+    implementation 'com.github.jeffreyliu8:Native-Floyd-Steinberg-Dithering:0.0.5'
 }

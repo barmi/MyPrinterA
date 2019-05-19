@@ -6,7 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +25,7 @@ import com.lvrenyang.io.Canvas;
 import com.lvrenyang.io.IOCallBack;
 import com.lvrenyang.sample3.R;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,6 +37,8 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 
 	private BroadcastReceiver broadcastReceiver = null;
 	private IntentFilter intentFilter = null;
+
+	private int PICK_IMAGE_REQUEST = 1;
 
 	Button btnSearch, btnDisconnect, btnPrint, btnPrint2;
 	SearchBTActivity mActivity;
@@ -76,6 +83,26 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 		btnDisconnect.performClick();
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+			Uri uri = data.getData();
+
+			try {
+				Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+				// Log.d(TAG, String.valueOf(bitmap));
+
+				//ImageView imageView = (ImageView) findViewById(R.id.imageView);
+				//imageView.setImageBitmap(bitmap);
+				Prints.PrintBitmap(getApplicationContext(), mCanvas, AppStart.nPrintWidth, AppStart.nPrintHeight, bitmap);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -112,16 +139,17 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 				break;
 
 			case R.id.buttonPrint2:
+				/*
 				btnPrint2.setEnabled(false);
 				es.submit(new TaskPrint2(mCanvas));
-				/*
+				*/
 				Intent intent = new Intent();
 				// Show only images, no videos or anything else
 				intent.setType("image/*");
 				intent.setAction(Intent.ACTION_GET_CONTENT);
 				// Always show the chooser (if there are multiple options available)
 				startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-				*/
+
 				break;
 		}
 	}

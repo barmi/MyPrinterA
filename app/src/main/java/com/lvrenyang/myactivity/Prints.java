@@ -335,4 +335,52 @@ public class Prints {
 
 		return newImg;
 	}
+
+	public static boolean PrintDots(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
+		boolean bPrintResult = false;
+
+		int printHeight = 20 + 5;// + 30 + 5 + 40 + 5;
+
+		int[] fullRGB = new int[nPrintWidth * printHeight];
+
+		//fullImage.getPixels(fullRGB, 0, fullImage.getWidth(), 0, 0, fullImage.getWidth(), fullImage.getHeight());
+
+		for(int y = 0;y < printHeight;y ++){
+			for(int x = 0;x < nPrintWidth;x ++){
+				int index = y * nPrintWidth + x;
+				/*
+				int oldRed   = (fullRGB[index] >> 16) & 0xFF;
+				int oldGreen = (fullRGB[index] >> 8) & 0xFF;
+				int oldBlue  = (fullRGB[index] >> 0) & 0xFF;
+				int newRed   = (int) Math.min(oldRed * (255. / weightedRed), 255);
+				int newGreen = (int) Math.min(oldGreen * (255. / weightedGreen), 255);
+				int newBlue   = (int) Math.min(oldBlue * (255. / weightedBlue), 255);
+				int newCol = (0xFF << 24) | (newRed << 16) | (newGreen << 8) | newBlue;
+				*/
+				final int clBlack = 0xFF000000;
+				final int clWhite = 0xFFFFFFFF;
+				int newCol;
+				if (y >= 0 && y < 20) {
+					newCol = ((x + y) % 2) == 0 ? clBlack : clWhite;
+				} else {
+					newCol = clWhite;
+				}
+				fullRGB[index] = newCol;
+			}
+		}
+		Bitmap pic = Bitmap.createBitmap(nPrintWidth, printHeight, Bitmap.Config.ARGB_8888);
+		//Bitmap newImg = Bitmap.createBitmap(fullImage);
+		pic.setPixels(fullRGB,0,nPrintWidth,0,0,nPrintWidth, printHeight);
+
+
+		canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
+		canvas.SetPrintDirection(0);
+		canvas.DrawBitmap(pic, 0, 0, 0);
+
+		canvas.CanvasEnd();
+		canvas.CanvasPrint(1, 1);
+
+		bPrintResult = canvas.GetIO().IsOpened();
+		return bPrintResult;
+	}
 }

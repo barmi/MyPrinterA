@@ -152,6 +152,10 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 				startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
 				break;
+
+			case R.id.buttonPrint3:
+				Prints.PrintDots(getApplicationContext(), mCanvas, AppStart.nPrintWidth, AppStart.nPrintHeight);
+				break;
 		}
 	}
 

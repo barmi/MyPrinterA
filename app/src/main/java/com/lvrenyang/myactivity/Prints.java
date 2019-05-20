@@ -337,9 +337,12 @@ public class Prints {
 	}
 
 	public static boolean PrintDots(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
+		final int clBlack = 0xFF000000;
+		final int clWhite = 0xFFFFFFFF;
+
 		boolean bPrintResult = false;
 
-		int printHeight = 20 + 5;// + 30 + 5 + 40 + 5;
+		int printHeight = 105 + 20;
 
 		int[] fullRGB = new int[nPrintWidth * printHeight];
 
@@ -348,20 +351,20 @@ public class Prints {
 		for(int y = 0;y < printHeight;y ++){
 			for(int x = 0;x < nPrintWidth;x ++){
 				int index = y * nPrintWidth + x;
-				/*
-				int oldRed   = (fullRGB[index] >> 16) & 0xFF;
-				int oldGreen = (fullRGB[index] >> 8) & 0xFF;
-				int oldBlue  = (fullRGB[index] >> 0) & 0xFF;
-				int newRed   = (int) Math.min(oldRed * (255. / weightedRed), 255);
-				int newGreen = (int) Math.min(oldGreen * (255. / weightedGreen), 255);
-				int newBlue   = (int) Math.min(oldBlue * (255. / weightedBlue), 255);
-				int newCol = (0xFF << 24) | (newRed << 16) | (newGreen << 8) | newBlue;
-				*/
-				final int clBlack = 0xFF000000;
-				final int clWhite = 0xFFFFFFFF;
+
 				int newCol;
-				if (y >= 0 && y < 20) {
+				if (y >= 0+10 && y < 20+10) {
+					// 0 ~ 20 (20) : 50% / 1010101010
 					newCol = ((x + y) % 2) == 0 ? clBlack : clWhite;
+				} else if (y >= 25+10 && y < 45+10) {
+					// 25 ~ 45 (20) : 50% / 110011001100
+					newCol = (((y / 2) % 2 == 0) && ((x / 2) % 2 == 0)) ? clBlack : clWhite;
+				} else if (y >= 50+10 && y < 70+10) {
+					// 50 ~ 70 (20) : 한 줄씩
+					newCol = (y % 2 == 0)  ? clBlack : clWhite;
+				} else if (y >= 75+10 && y < 95+10) {
+					// 75 ~ 95 (20) : 2 줄씩
+					newCol = ((y / 2) % 2 == 0)  ? clBlack : clWhite;
 				} else {
 					newCol = clWhite;
 				}
@@ -378,7 +381,8 @@ public class Prints {
 		canvas.DrawBitmap(pic, 0, 0, 0);
 
 		canvas.CanvasEnd();
-		canvas.CanvasPrint(1, 1);
+		//canvas.CanvasPrint(1, 1);
+		canvas.CanvasPrint(0, 0);
 
 		bPrintResult = canvas.GetIO().IsOpened();
 		return bPrintResult;

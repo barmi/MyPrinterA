@@ -42,69 +42,79 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/buttons"
+        android:layout_above="@+id/buttons1"
         android:layout_marginTop="10dp"
         android:text="Disconnect" />
-    <TableLayout
-        android:id="@+id/buttons"
+    <LinearLayout
+        android:id="@+id/buttons1"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/buttons2"
         android:layout_alignParentLeft="true"
-        android:layout_height="wrap_content"
-        android:stretchColumns="0,1">
-        <TableRow>
+        android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/buttonPrint1"
-                android:layout_width="13dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="티켓" />
 
             <Button
                 android:id="@+id/buttonPrint2"
-                android:layout_width="117dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="사진" />
             <Button
                 android:id="@+id/buttonPrint3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="점test" />
             <Button
                 android:id="@+id/buttonPrint4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="배출" />
-        </TableRow>
-        <TableRow>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/buttons2"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content">
             <Button
                 android:id="@+id/buttonPrint5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="출력" />
             <Button
                 android:id="@+id/buttonPrint6"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="출력" />
             <Button
                 android:id="@+id/buttonPrint7"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="출력" />
             <Button
                 android:id="@+id/buttonPrint8"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="출력" />
-        </TableRow>
-    </TableLayout>
+    </LinearLayout>
 </RelativeLayout>

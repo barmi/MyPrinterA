@@ -125,7 +125,7 @@ public class Prints {
         // white balance
 		Bitmap balPic = balance(pic, pic);
         // dithering
-		Bitmap bwBitmap = com.askjeffreyliu.floydsteinbergdithering.Utils.floydSteinbergDithering(balPic);
+		Bitmap bwBitmap = com.askjeffreyliu.floydsteinbergdithering.Utils.floydSteinbergDithering(pic);
 
         canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
         canvas.SetPrintDirection(0);
@@ -398,7 +398,8 @@ public class Prints {
 		for(int y = 0;y < printHeight;y ++){
 			for(int x = 0;x < nPrintWidth;x ++){
 				int index = y * nPrintWidth + x;
-				fullRGB[index] = clWhite;
+				int newCol = clWhite;
+				fullRGB[index] = newCol;
 			}
 		}
 		Bitmap pic = Bitmap.createBitmap(nPrintWidth, printHeight, Bitmap.Config.ARGB_8888);
@@ -409,7 +410,7 @@ public class Prints {
 		canvas.DrawBitmap(pic, 0, 0, 0);
 
 		canvas.CanvasEnd();
-		canvas.CanvasPrint(1, 1);
+		canvas.CanvasPrint(0, 1);
 
 		bPrintResult = canvas.GetIO().IsOpened();
 		return bPrintResult;

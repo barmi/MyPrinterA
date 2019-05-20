@@ -16,6 +16,8 @@ import java.util.Arrays;
 
 
 public class Prints {
+	private final static int clBlack = 0xFF000000;
+	private final static int clWhite = 0xFFFFFFFF;
 
 	public static boolean PrintTicket(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
 		boolean bPrintResult = false;
@@ -337,9 +339,6 @@ public class Prints {
 	}
 
 	public static boolean PrintDots(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
-		final int clBlack = 0xFF000000;
-		final int clWhite = 0xFFFFFFFF;
-
 		boolean bPrintResult = false;
 
 		int printHeight = 105 + 20;
@@ -383,6 +382,34 @@ public class Prints {
 		canvas.CanvasEnd();
 		//canvas.CanvasPrint(1, 1);
 		canvas.CanvasPrint(0, 0);
+
+		bPrintResult = canvas.GetIO().IsOpened();
+		return bPrintResult;
+	}
+
+	public static boolean PrintFeed(Context ctx, Canvas canvas, int nPrintWidth, int nPrintHeight) {
+
+		boolean bPrintResult = false;
+
+		int printHeight = 10;
+
+		int[] fullRGB = new int[nPrintWidth * printHeight];
+
+		for(int y = 0;y < printHeight;y ++){
+			for(int x = 0;x < nPrintWidth;x ++){
+				int index = y * nPrintWidth + x;
+				fullRGB[index] = clWhite;
+			}
+		}
+		Bitmap pic = Bitmap.createBitmap(nPrintWidth, printHeight, Bitmap.Config.ARGB_8888);
+		pic.setPixels(fullRGB,0,nPrintWidth,0,0,nPrintWidth, printHeight);
+
+		canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
+		canvas.SetPrintDirection(0);
+		canvas.DrawBitmap(pic, 0, 0, 0);
+
+		canvas.CanvasEnd();
+		canvas.CanvasPrint(1, 1);
 
 		bPrintResult = canvas.GetIO().IsOpened();
 		return bPrintResult;

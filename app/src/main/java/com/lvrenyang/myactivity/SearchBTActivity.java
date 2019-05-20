@@ -156,6 +156,9 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 			case R.id.buttonPrint3:
 				Prints.PrintDots(getApplicationContext(), mCanvas, AppStart.nPrintWidth, AppStart.nPrintHeight);
 				break;
+			case R.id.buttonPrint4:
+				Prints.PrintFeed(getApplicationContext(), mCanvas, AppStart.nPrintWidth, AppStart.nPrintHeight);
+				break;
 		}
 	}
 

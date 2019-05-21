@@ -393,21 +393,8 @@ public class Prints {
 
 		int printHeight = 10;
 
-		int[] fullRGB = new int[nPrintWidth * printHeight];
-
-		for(int y = 0;y < printHeight;y ++){
-			for(int x = 0;x < nPrintWidth;x ++){
-				int index = y * nPrintWidth + x;
-				int newCol = clWhite;
-				fullRGB[index] = newCol;
-			}
-		}
-		Bitmap pic = Bitmap.createBitmap(nPrintWidth, printHeight, Bitmap.Config.ARGB_8888);
-		pic.setPixels(fullRGB,0,nPrintWidth,0,0,nPrintWidth, printHeight);
-
-		canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
+		canvas.CanvasBegin(nPrintWidth, printHeight);
 		canvas.SetPrintDirection(0);
-		canvas.DrawBitmap(pic, 0, 0, 0);
 
 		canvas.CanvasEnd();
 		canvas.CanvasPrint(0, 1);

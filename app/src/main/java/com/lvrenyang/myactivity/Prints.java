@@ -127,9 +127,9 @@ public class Prints {
         // dithering
 		Bitmap bwBitmap = com.askjeffreyliu.floydsteinbergdithering.Utils.floydSteinbergDithering(pic);
 
-        canvas.CanvasBegin(pic.getWidth(), pic.getHeight());
+        canvas.CanvasBegin(pic.getWidth(), pic.getHeight() + 50 + 80);
         canvas.SetPrintDirection(0);
-        canvas.DrawBitmap(bwBitmap, 0, 0, 0);
+        canvas.DrawBitmap(bwBitmap, 0, 50, 0);
 
         canvas.CanvasEnd();
         canvas.CanvasPrint(1, 1);

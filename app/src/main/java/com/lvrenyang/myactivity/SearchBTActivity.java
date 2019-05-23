@@ -136,7 +136,7 @@ public class SearchBTActivity extends AppCompatActivity implements OnClickListen
 
 			case R.id.buttonPrint1:
 				btnPrint[0].setEnabled(false);
-				es.submit(new TaskPrint(mCanvas));
+				es.submit(new TaskPrint2(mCanvas));
 				break;
 
 			case R.id.buttonPrint2:
